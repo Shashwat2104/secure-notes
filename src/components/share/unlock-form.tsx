@@ -78,8 +78,8 @@ export function UnlockForm({ token, onUnlocked }: UnlockFormProps) {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto p-5 sm:p-6 rounded-md border border-slate-800 bg-slate-900/80 space-y-4 text-left">
-      <div className="text-center space-y-2 pb-2 border-b border-slate-800">
+    <div className="max-w-md w-full mx-auto p-5 sm:p-6 rounded-[4px] border border-[#1e293b] bg-[#0b1326] space-y-4 text-left">
+      <div className="text-center space-y-2 pb-2 border-b border-[#1e293b]">
         <div className="w-10 h-10 rounded-[4px] bg-amber-500/10 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center">
           <Key className="w-5 h-5" />
         </div>
@@ -119,11 +119,11 @@ export function UnlockForm({ token, onUnlocked }: UnlockFormProps) {
           <div className="relative">
             <input
               type="text"
-              placeholder="XXXX-XXXX-XXXX"
+              placeholder="XXXX-XXXX"
               value={accessKey}
               onChange={(e) => handleKeyChange(e.target.value)}
               disabled={retryAfter !== null}
-              className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-md text-slate-100 placeholder-slate-600 text-center font-mono text-base font-bold tracking-widest focus:outline-none focus-visible:ring-1 focus-visible:ring-emerald-500 disabled:opacity-50 transition-colors uppercase"
+              className="w-full px-3 py-2.5 bg-[#060e20] border border-[#1e293b] rounded-[4px] text-slate-100 placeholder-slate-600 text-center font-mono text-base font-bold tracking-widest focus:outline-none focus-visible:ring-1 focus-visible:ring-emerald-400 disabled:opacity-50 transition-colors uppercase"
               maxLength={16}
               required
             />

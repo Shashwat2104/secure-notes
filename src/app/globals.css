@@ -5,6 +5,13 @@
 :root {
   --background: #020617;
   --foreground: #f8fafc;
+  --surface-base: #020617;
+  --surface-card: #0b1326;
+  --surface-elevated: #0f172a;
+  --surface-layer: #171f33;
+  --border-subtle: #1e293b;
+  --border-interactive: #334155;
+  --primary-emerald: #10b981;
 }
 
 body {
@@ -14,6 +21,11 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular numbers and slashed zero for JetBrains Mono */
+.font-mono {
+  font-feature-settings: "zero" 1, "tnum" 1;
 }
 
 /* Accessible surgical focus ring for keyboard navigation */
@@ -38,9 +50,20 @@ body {
   background: #334155;
 }
 
+/* Tactical Panel Surface */
+.tactical-surface {
+  background-color: #0b1326;
+  border: 1px solid #1e293b;
+}
+
+.tactical-surface-elevated {
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+}
+
 /* Hairline code container utility */
 .terminal-surface {
-  background: #070c18;
+  background: #060e20;
   border: 1px solid #1e293b;
 }
 

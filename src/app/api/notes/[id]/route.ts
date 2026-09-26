@@ -12,9 +12,10 @@ export async function GET(
     if (!session?.user?.id) {
       return apiError("Authentication required", 401);
     }
-
     const { id } = await params;
-    const origin = req.nextUrl.origin || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const proto = req.headers.get("x-forwarded-proto") || req.nextUrl.protocol.replace(":", "");
+    const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || req.nextUrl.host;
+    const origin = process.env.NEXT_APP_URL || process.env.NEXT_PUBLIC_APP_URL || (host ? `${proto}://${host}` : req.nextUrl.origin) || "http://localhost:3000";
     const note = await NoteService.getNoteDetails(session.user.id, id, origin);
 
     if (!note) {

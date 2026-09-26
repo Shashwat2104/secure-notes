@@ -61,9 +61,9 @@ export function RegisterForm() {
   };
 
   return (
-    <div className="max-w-md w-full mx-auto p-5 sm:p-6 rounded-md border border-slate-800 bg-slate-900/80 space-y-4 text-left">
-      <div className="text-center space-y-2 pb-2 border-b border-slate-800">
-        <div className="w-9 h-9 rounded-[4px] bg-slate-950 border border-slate-700/80 text-emerald-400 mx-auto flex items-center justify-center">
+    <div className="max-w-md w-full mx-auto p-5 sm:p-6 rounded-[4px] border border-[#1e293b] bg-[#0b1326] space-y-4 text-left">
+      <div className="text-center space-y-2 pb-2 border-b border-[#1e293b]">
+        <div className="w-9 h-9 rounded-[4px] bg-[#060e20] border border-[#1e293b] text-emerald-400 mx-auto flex items-center justify-center">
           <ShieldCheck className="w-4 h-4" />
         </div>
         <div>
@@ -136,7 +136,7 @@ export function RegisterForm() {
           <span>{isSubmitting ? "Generating Credentials..." : "Initialize Vault Profile"}</span>
         </Button>
 
-        <p className="text-[11px] font-mono text-center text-slate-400 pt-2 border-t border-slate-800/80">
+        <p className="text-[11px] font-mono text-center text-slate-400 pt-2 border-t border-[#1e293b]">
           Already registered?{" "}
           <Link href="/login" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
             Sign In

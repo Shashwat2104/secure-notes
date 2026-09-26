@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     const proto = req.headers.get("x-forwarded-proto") || req.nextUrl.protocol.replace(":", "");
     const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || req.nextUrl.host;
-    const origin = process.env.NEXT_PUBLIC_APP_URL || (host ? `${proto}://${host}` : req.nextUrl.origin) || "http://localhost:3000";
+    const origin = process.env.NEXT_APP_URL || process.env.NEXT_PUBLIC_APP_URL || (host ? `${proto}://${host}` : req.nextUrl.origin) || "http://localhost:3000";
     const note = await NoteService.createNote(session.user.id, result.data, origin);
 
     return apiSuccess(note, 201);

@@ -142,9 +142,9 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
 
       {/* One-Time Access Key Voucher */}
       {oneTimeAccessKey && (
-        <div className="p-4 sm:p-5 rounded-md border border-amber-500/40 bg-amber-950/20 space-y-3">
+        <div className="p-4 sm:p-5 rounded-[4px] border border-amber-500/40 bg-amber-950/20 space-y-3">
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-[4px] bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
+            <div className="w-8 h-8 rounded-[4px] bg-[#060e20] border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
               <Key className="w-4 h-4" />
             </div>
             <div className="space-y-0.5">
@@ -158,7 +158,7 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
             </div>
           </div>
 
-          <div className="flex items-center gap-2 p-2.5 bg-slate-950 rounded border border-amber-500/30">
+          <div className="flex items-center gap-2 p-2.5 bg-[#060e20] rounded-[4px] border border-amber-500/30">
             <span className="text-lg sm:text-xl font-mono font-bold tracking-widest text-amber-300 flex-1 select-all">
               {oneTimeAccessKey}
             </span>
@@ -166,7 +166,7 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
               size="sm"
               variant="amber"
               onClick={handleCopyKey}
-              className="gap-1 font-mono text-xs"
+              className="gap-1 font-mono text-xs uppercase"
             >
               {copiedKey ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedKey ? "COPIED" : "COPY KEY"}</span>
@@ -182,9 +182,9 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
       )}
 
       {/* Record Overview & Dispatch Center */}
-      <div className="rounded-md border border-slate-800 bg-slate-900/70 p-4 sm:p-5 space-y-4">
+      <div className="rounded-[4px] border border-[#1e293b] bg-[#0b1326] p-4 sm:p-5 space-y-4">
         {/* Record Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1e293b] pb-3.5">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <h1 className="text-base sm:text-lg font-semibold text-slate-100">{note.title}</h1>
@@ -212,7 +212,7 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
               <span>{copiedContent ? "Copied" : "Copy Payload"}</span>
             </button>
           </div>
-          <div className="p-3 sm:p-4 bg-slate-950 rounded border border-slate-800 font-mono text-xs text-slate-200 whitespace-pre-wrap leading-relaxed select-all">
+          <div className="p-3 sm:p-4 bg-[#060e20] rounded-[4px] border border-[#1e293b] font-mono text-xs text-slate-200 whitespace-pre-wrap leading-relaxed select-all">
             {note.content}
           </div>
         </div>
@@ -221,9 +221,9 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
         {note.shareLinks.map((link) => (
           <div
             key={link.id}
-            className="p-3.5 sm:p-4 rounded border border-slate-800 bg-slate-950/70 space-y-3"
+            className="p-3.5 sm:p-4 rounded-[4px] border border-[#1e293b] bg-[#060e20] space-y-3"
           >
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1e293b] pb-2.5">
               <div className="flex items-center gap-2">
                 <span className="text-[11px] font-mono font-medium uppercase tracking-wider text-slate-300">
                   Dispatch Channel Token
@@ -253,13 +253,13 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
                   <input
                     readOnly
                     value={oneTimeShareUrl || link.shareUrl}
-                    className="flex-1 px-2.5 py-1.5 bg-slate-950 border border-slate-800 rounded text-xs font-mono text-slate-300 select-all focus:outline-none"
+                    className="flex-1 px-2.5 py-1.5 bg-[#0b1326] border border-[#1e293b] rounded-[4px] text-xs font-mono text-slate-300 select-all focus:outline-none"
                   />
                   <Button
                     size="sm"
                     variant="secondary"
                     onClick={handleCopyLink}
-                    className="gap-1 font-mono text-xs shrink-0"
+                    className="gap-1 font-mono text-xs shrink-0 uppercase"
                   >
                     {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedLink ? "COPIED" : "COPY LINK"}</span>
@@ -270,7 +270,7 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
 
             {/* Metadata Parameters Strip */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
-              <div className="p-2 bg-slate-900/60 rounded border border-slate-800/80">
+              <div className="p-2 bg-[#0b1326] rounded-[4px] border border-[#1e293b]">
                 <span className="text-[10px] uppercase text-slate-500 block">Policy</span>
                 <span className="font-semibold text-slate-200 flex items-center gap-1 mt-0.5">
                   {link.shareType === "ONE_TIME" ? (
@@ -285,7 +285,7 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
                 </span>
               </div>
 
-              <div className="p-2 bg-slate-900/60 rounded border border-slate-800/80">
+              <div className="p-2 bg-[#0b1326] rounded-[4px] border border-[#1e293b]">
                 <span className="text-[10px] uppercase text-slate-500 block">Protection</span>
                 <span className="font-semibold text-slate-200 flex items-center gap-1 mt-0.5">
                   {link.accessType === "PASSWORD_PROTECTED" ? (
@@ -300,14 +300,14 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
                 </span>
               </div>
 
-              <div className="p-2 bg-slate-900/60 rounded border border-slate-800/80">
+              <div className="p-2 bg-[#0b1326] rounded-[4px] border border-[#1e293b]">
                 <span className="text-[10px] uppercase text-slate-500 block">Claim State</span>
                 <span className="font-semibold text-slate-200 block mt-0.5">
                   {link.consumedAt ? "CONSUMED" : link.shareType === "ONE_TIME" ? "AWAITING READ" : "AVAILABLE"}
                 </span>
               </div>
 
-              <div className="p-2 bg-slate-900/60 rounded border border-slate-800/80">
+              <div className="p-2 bg-[#0b1326] rounded-[4px] border border-[#1e293b]">
                 <span className="text-[10px] uppercase text-slate-500 block">Revocation</span>
                 <span className="font-semibold text-slate-200 block mt-0.5">
                   {link.revokedAt ? "REVOKED" : "ACTIVE"}
@@ -323,7 +323,7 @@ export function NoteDetail({ note: initialNote, initialCreated }: NoteDetailProp
                   size="sm"
                   onClick={() => handleRevoke(link.id)}
                   loading={isRevoking}
-                  className="gap-1 font-mono text-xs"
+                  className="gap-1 font-mono text-xs uppercase"
                 >
                   <Ban className="w-3.5 h-3.5" />
                   <span>{isRevoking ? "Revoking..." : "Revoke & Invalidate Token"}</span>

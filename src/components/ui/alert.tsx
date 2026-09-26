@@ -15,10 +15,10 @@ export function Alert({
   className = "",
 }: AlertProps) {
   const styles = {
-    info: "bg-slate-900/90 border-slate-700 text-slate-200",
-    success: "bg-emerald-950/60 border-emerald-500/40 text-emerald-200",
-    warning: "bg-amber-950/60 border-amber-500/40 text-amber-200",
-    error: "bg-rose-950/60 border-rose-500/40 text-rose-200",
+    info: "bg-[#0b1326] border-[#1e293b] text-slate-200",
+    success: "bg-emerald-950/30 border-emerald-500/40 text-emerald-200",
+    warning: "bg-amber-950/30 border-amber-500/40 text-amber-200",
+    error: "bg-rose-950/30 border-rose-500/40 text-rose-200",
   };
 
   const icons = {
@@ -31,7 +31,7 @@ export function Alert({
   return (
     <div
       role="alert"
-      className={`border rounded-md p-3 flex gap-2.5 text-xs ${styles[variant]} ${className}`}
+      className={`border rounded-[4px] p-3 flex gap-2.5 text-xs ${styles[variant]} ${className}`}
     >
       {icons[variant]}
       <div className="space-y-0.5 text-left flex-1">

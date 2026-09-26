@@ -22,7 +22,7 @@ export function Navbar({ user }: NavbarProps) {
   const isNewActive = pathname === "/notes/new";
 
   return (
-    <header className="border-b border-slate-800 bg-slate-950/90 backdrop-blur-xs sticky top-0 z-50">
+    <header className="border-b border-[#1e293b] bg-[#020617]/95 backdrop-blur-xs sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
         {/* Brand & Cryptographic Telemetry */}
         <div className="flex items-center gap-3">
@@ -30,12 +30,12 @@ export function Navbar({ user }: NavbarProps) {
             href="/"
             className="flex items-center gap-2 font-mono text-sm sm:text-base text-slate-100 hover:text-emerald-400 transition-colors"
           >
-            <div className="w-7 h-7 rounded-[4px] bg-slate-900 border border-slate-700/80 flex items-center justify-center text-emerald-400">
+            <div className="w-7 h-7 rounded-[4px] bg-[#0b1326] border border-[#1e293b] flex items-center justify-center text-emerald-400">
               <Shield className="w-3.5 h-3.5" />
             </div>
             <span className="font-semibold tracking-tight">SECURE<span className="text-emerald-400">_VAULT</span></span>
           </Link>
-          <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">
+          <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] bg-[#0b1326] border border-[#1e293b] text-[10px] font-mono text-slate-400">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse shrink-0" />
             AES-256-GCM / ZERO-KNOWLEDGE
           </span>

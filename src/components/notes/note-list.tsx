@@ -117,50 +117,53 @@ export function NoteList({ notes }: NoteListProps) {
   }
 
   return (
-    <div className="space-y-4 text-left">
-      {/* Vault Header & Integrated Telemetry Ribbon (Replacing generic KPI cards) */}
-      <div className="rounded-md border border-slate-800 bg-slate-900/70 p-4 sm:p-5 space-y-4">
+    <div className="space-y-3.5 text-left">
+      {/* Vault Header & Integrated Telemetry Ribbon */}
+      <div className="rounded-[4px] border border-[#1e293b] bg-[#0b1326] p-4 sm:p-5 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-base font-semibold text-slate-100 tracking-tight font-mono uppercase">
+              <h1 className="text-sm sm:text-base font-semibold text-slate-100 tracking-tight font-mono uppercase">
                 Encrypted Vault Ledger
               </h1>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-[3px] bg-slate-800 text-slate-300 border border-slate-700">
-                ACTIVE
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-[2px] bg-[#171f33] text-emerald-400 border border-emerald-500/30 font-semibold">
+                E2EE ACTIVE
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Multi-tenant isolated vault with row-level concurrency protection and cryptographic hash validation.
+            <p className="text-xs text-slate-400 mt-1">
+              Multi-tenant isolated vault with row-level concurrency protection and authenticated AES-256-GCM payload encryption.
             </p>
           </div>
 
           <Link href="/notes/new">
-            <Button variant="primary" size="sm" className="gap-1.5 shrink-0">
+            <Button variant="primary" size="sm" className="gap-1.5 shrink-0 uppercase tracking-wider text-[11px] font-mono">
               <Plus className="w-3.5 h-3.5" />
-              <span>Draft New Secret</span>
+              <span>Draft Secret</span>
             </Button>
           </Link>
         </div>
 
         {/* Integrated Telemetry Ribbon */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-800 text-xs font-mono">
-          <div className="p-2.5 rounded-[4px] bg-slate-950/70 border border-slate-800/80">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-[#1e293b] text-xs font-mono">
+          <div className="p-2.5 rounded-[4px] bg-[#060e20] border border-[#1e293b]">
             <div className="text-[10px] uppercase text-slate-500 tracking-wider">Vault Records</div>
-            <div className="text-sm font-bold text-slate-100 mt-0.5">{totalNotes} <span className="text-[10px] font-normal text-slate-500">SECRETS</span></div>
+            <div className="text-sm font-bold text-slate-100 mt-0.5">{totalNotes} <span className="text-[10px] font-normal text-slate-500">PAYLOADS</span></div>
           </div>
-          <div className="p-2.5 rounded-[4px] bg-slate-950/70 border border-slate-800/80">
+          <div className="p-2.5 rounded-[4px] bg-[#060e20] border border-[#1e293b]">
             <div className="text-[10px] uppercase text-slate-500 tracking-wider">Active Dispatches</div>
-            <div className="text-sm font-bold text-emerald-400 mt-0.5">{activeLinks} <span className="text-[10px] font-normal text-slate-500">LIVE</span></div>
+            <div className="text-sm font-bold text-emerald-400 mt-0.5 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse shrink-0" />
+              {activeLinks} <span className="text-[10px] font-normal text-slate-500">LIVE</span>
+            </div>
           </div>
-          <div className="p-2.5 rounded-[4px] bg-slate-950/70 border border-slate-800/80">
+          <div className="p-2.5 rounded-[4px] bg-[#060e20] border border-[#1e293b]">
             <div className="text-[10px] uppercase text-slate-500 tracking-wider">Verified Decryptions</div>
-            <div className="text-sm font-bold text-slate-200 mt-0.5">{totalViews} <span className="text-[10px] font-normal text-slate-500">VIEWS</span></div>
+            <div className="text-sm font-bold text-slate-200 mt-0.5">{totalViews} <span className="text-[10px] font-normal text-slate-500">READS</span></div>
           </div>
-          <div className="p-2.5 rounded-[4px] bg-slate-950/70 border border-slate-800/80">
-            <div className="text-[10px] uppercase text-slate-500 tracking-wider">Encryption Engine</div>
+          <div className="p-2.5 rounded-[4px] bg-[#060e20] border border-[#1e293b]">
+            <div className="text-[10px] uppercase text-slate-500 tracking-wider">Cipher Primitive</div>
             <div className="text-xs font-semibold text-slate-300 mt-1 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               AES-256-GCM
             </div>
           </div>
@@ -168,15 +171,15 @@ export function NoteList({ notes }: NoteListProps) {
       </div>
 
       {/* Ledger Toolbar: Search and Filter Tabs */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 p-1.5 rounded-md bg-slate-950 border border-slate-800">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 p-1.5 rounded-[4px] bg-[#060e20] border border-[#1e293b]">
         <div className="relative flex-1">
           <Search className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5" />
           <input
             type="text"
-            placeholder="Search records by secret title..."
+            placeholder="Filter records by identifier or title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-8 pr-3 py-1.5 bg-transparent border-0 rounded text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-0"
+            className="w-full pl-8 pr-3 py-1.5 bg-transparent border-0 rounded text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-0 font-mono"
           />
         </div>
 
@@ -186,8 +189,8 @@ export function NoteList({ notes }: NoteListProps) {
             onClick={() => setFilterMode("ALL")}
             className={`px-2.5 py-1 rounded-[4px] text-[11px] font-medium transition-colors cursor-pointer ${
               filterMode === "ALL"
-                ? "bg-slate-800 text-slate-100 border border-slate-700"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                ? "bg-[#171f33] text-slate-100 border border-[#334155]"
+                : "text-slate-400 hover:text-slate-200 hover:bg-[#0b1326] border border-transparent"
             }`}
           >
             ALL [{notes.length}]
@@ -197,8 +200,8 @@ export function NoteList({ notes }: NoteListProps) {
             onClick={() => setFilterMode("ACTIVE")}
             className={`px-2.5 py-1 rounded-[4px] text-[11px] font-medium transition-colors cursor-pointer ${
               filterMode === "ACTIVE"
-                ? "bg-emerald-950/80 text-emerald-300 border border-emerald-500/40"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                ? "bg-emerald-950/60 text-emerald-300 border border-emerald-500/40"
+                : "text-slate-400 hover:text-slate-200 hover:bg-[#0b1326] border border-transparent"
             }`}
           >
             ACTIVE [{activeLinks}]
@@ -208,8 +211,8 @@ export function NoteList({ notes }: NoteListProps) {
             onClick={() => setFilterMode("VIEWED")}
             className={`px-2.5 py-1 rounded-[4px] text-[11px] font-medium transition-colors cursor-pointer ${
               filterMode === "VIEWED"
-                ? "bg-slate-800 text-slate-200 border border-slate-700"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                ? "bg-[#171f33] text-slate-200 border border-[#334155]"
+                : "text-slate-400 hover:text-slate-200 hover:bg-[#0b1326] border border-transparent"
             }`}
           >
             CLAIMED
@@ -219,7 +222,7 @@ export function NoteList({ notes }: NoteListProps) {
 
       {/* Ledger Records Table */}
       {filteredNotes.length === 0 ? (
-        <div className="text-center py-10 rounded-md border border-slate-800 bg-slate-900/30">
+        <div className="text-center py-10 rounded-[4px] border border-[#1e293b] bg-[#0b1326]/50">
           <p className="text-xs text-slate-400 font-mono">No vault records match &quot;{searchQuery}&quot;</p>
           <button
             type="button"
@@ -229,23 +232,31 @@ export function NoteList({ notes }: NoteListProps) {
             }}
             className="text-xs font-mono text-emerald-400 hover:underline mt-1.5 cursor-pointer"
           >
-            Clear filter query
+            Reset query filters
           </button>
         </div>
       ) : (
-        <div className="rounded-md border border-slate-800 bg-slate-900/40 overflow-hidden divide-y divide-slate-800/80">
+        <div className="rounded-[4px] border border-[#1e293b] bg-[#0b1326] overflow-hidden divide-y divide-[#1e293b]">
+          {/* Table Header (Desktop) */}
+          <div className="hidden sm:grid sm:grid-cols-12 px-4 py-2 bg-[#060e20] text-[10px] font-mono uppercase tracking-wider text-slate-500 border-b border-[#1e293b]">
+            <div className="col-span-6">Secret Identifier &amp; Title</div>
+            <div className="col-span-3">Dispatch Policy</div>
+            <div className="col-span-3 text-right">Decryption Telemetry</div>
+          </div>
+
           {filteredNotes.map((note) => {
             const hasActiveLink = note.activeLinksCount > 0;
 
             return (
               <div
                 key={note.id}
-                className="p-3 sm:p-4 hover:bg-slate-850/60 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+                className="p-3.5 sm:px-4 sm:py-3.5 hover:bg-[#0f172a] transition-colors flex flex-col sm:grid sm:grid-cols-12 sm:items-center gap-2.5 sm:gap-3 text-xs"
               >
-                <div className="space-y-1.5 min-w-0">
+                {/* Col 1: Title & Ref ID */}
+                <div className="col-span-6 space-y-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-mono text-[10px] text-slate-500 uppercase tracking-wider">
-                      #{note.id.slice(0, 8)}
+                    <span className="font-mono text-[10px] text-slate-500 uppercase tracking-wider px-1.5 py-0.5 rounded-[2px] bg-[#060e20] border border-[#1e293b]">
+                      #sec_{note.id.slice(0, 8)}
                     </span>
                     <Link
                       href={`/notes/${note.id}`}
@@ -253,36 +264,38 @@ export function NoteList({ notes }: NoteListProps) {
                     >
                       {note.title}
                     </Link>
-
-                    {hasActiveLink ? (
-                      <Badge variant="active">
-                        {note.activeLinksCount} Active Share{note.activeLinksCount > 1 ? "s" : ""}
-                      </Badge>
-                    ) : (
-                      <Badge variant="expired">No Active Shares</Badge>
-                    )}
                   </div>
-
-                  <div className="text-[11px] text-slate-400 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono">
-                    <span className="text-slate-500">
-                      Created: {new Date(note.createdAt).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </span>
-                    <span className="text-slate-400 flex items-center gap-1">
-                      <Eye className="w-3 h-3 text-slate-500" />
-                      <strong className="text-slate-200">{note.totalViews}</strong> view{note.totalViews === 1 ? "" : "s"} recorded
-                    </span>
+                  <div className="text-[11px] text-slate-500 font-mono">
+                    Created {new Date(note.createdAt).toLocaleDateString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })} · AES-256-GCM
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                {/* Col 2: Policy Status */}
+                <div className="col-span-3 flex items-center gap-1.5">
+                  {hasActiveLink ? (
+                    <Badge variant="active">
+                      {note.activeLinksCount} Active Share{note.activeLinksCount > 1 ? "s" : ""}
+                    </Badge>
+                  ) : (
+                    <Badge variant="expired">No Active Shares</Badge>
+                  )}
+                </div>
+
+                {/* Col 3: Views & Action */}
+                <div className="col-span-3 flex items-center justify-between sm:justify-end gap-3">
+                  <span className="text-[11px] text-slate-400 font-mono flex items-center gap-1">
+                    <Eye className="w-3 h-3 text-slate-500" />
+                    <strong className="text-slate-200">{note.totalViews}</strong>
+                  </span>
+
                   <Link href={`/notes/${note.id}`}>
-                    <Button variant="secondary" size="sm" className="gap-1 font-mono text-[11px]">
+                    <Button variant="secondary" size="sm" className="gap-1 font-mono text-[11px] h-7 px-2.5">
                       <span>Inspect</span>
-                      <ArrowRight className="w-3 h-3" />
+                      <ArrowRight className="w-3 h-3 text-slate-400" />
                     </Button>
                   </Link>
                 </div>

@@ -25,7 +25,7 @@ export default async function HomePage() {
       <Navbar user={session?.user} />
       <main className="flex-1 max-w-5xl mx-auto px-4 py-12 flex flex-col justify-center items-center text-center">
         {/* Specification Identifier Pill */}
-        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[4px] bg-slate-900 border border-slate-800 text-slate-300 text-[11px] font-mono mb-5">
+        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[4px] bg-[#0b1326] border border-[#1e293b] text-slate-300 text-[11px] font-mono mb-5">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse shrink-0" />
           <span>ZERO-KNOWLEDGE COURIER // RFC-GRADE PROTOCOL</span>
         </div>
@@ -70,9 +70,9 @@ export default async function HomePage() {
           )}
         </div>
 
-        {/* Protocol Pipeline Diagram (Authentic, not fake macOS window) */}
-        <div className="mt-12 w-full rounded-md border border-slate-800 bg-slate-900/60 p-4 sm:p-5 text-left space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        {/* Protocol Pipeline Diagram */}
+        <div className="mt-12 w-full rounded-[4px] border border-[#1e293b] bg-[#0b1326] p-4 sm:p-5 text-left space-y-4">
+          <div className="flex items-center justify-between border-b border-[#1e293b] pb-3">
             <div className="flex items-center gap-2">
               <Terminal className="w-4 h-4 text-emerald-400" />
               <span className="text-xs font-mono font-semibold uppercase tracking-wider text-slate-300">
@@ -86,7 +86,7 @@ export default async function HomePage() {
 
           {/* Pipeline Steps Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs font-mono">
-            <div className="p-3 rounded bg-slate-950 border border-slate-800 space-y-1">
+            <div className="p-3 rounded-[4px] bg-[#060e20] border border-[#1e293b] space-y-1">
               <div className="text-[10px] uppercase text-emerald-400 font-bold">01 // Plaintext</div>
               <div className="text-slate-200 font-semibold">Client Sealing</div>
               <p className="text-[11px] text-slate-400 leading-normal">
@@ -94,7 +94,7 @@ export default async function HomePage() {
               </p>
             </div>
 
-            <div className="p-3 rounded bg-slate-950 border border-slate-800 space-y-1">
+            <div className="p-3 rounded-[4px] bg-[#060e20] border border-[#1e293b] space-y-1">
               <div className="text-[10px] uppercase text-emerald-400 font-bold">02 // Key Derivation</div>
               <div className="text-slate-200 font-semibold">Argon2id Hash</div>
               <p className="text-[11px] text-slate-400 leading-normal">
@@ -102,7 +102,7 @@ export default async function HomePage() {
               </p>
             </div>
 
-            <div className="p-3 rounded bg-slate-950 border border-slate-800 space-y-1">
+            <div className="p-3 rounded-[4px] bg-[#060e20] border border-[#1e293b] space-y-1">
               <div className="text-[10px] uppercase text-amber-400 font-bold">03 // Concurrency</div>
               <div className="text-slate-200 font-semibold">Row-Level Lock</div>
               <p className="text-[11px] text-slate-400 leading-normal">
@@ -110,7 +110,7 @@ export default async function HomePage() {
               </p>
             </div>
 
-            <div className="p-3 rounded bg-slate-950 border border-slate-800 space-y-1">
+            <div className="p-3 rounded-[4px] bg-[#060e20] border border-[#1e293b] space-y-1">
               <div className="text-[10px] uppercase text-rose-400 font-bold">04 // Shredding</div>
               <div className="text-slate-200 font-semibold">Single Burn</div>
               <p className="text-[11px] text-slate-400 leading-normal">
@@ -122,7 +122,7 @@ export default async function HomePage() {
 
         {/* Technical Specification Matrix */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4 text-left w-full">
-          <div className="p-4 rounded-md bg-slate-900/60 border border-slate-800 space-y-2">
+          <div className="p-4 rounded-[4px] bg-[#0b1326] border border-[#1e293b] space-y-2">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-[4px] bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
                 <Flame className="w-3.5 h-3.5" />
@@ -136,7 +136,7 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="p-4 rounded-md bg-slate-900/60 border border-slate-800 space-y-2">
+          <div className="p-4 rounded-[4px] bg-[#0b1326] border border-[#1e293b] space-y-2">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-[4px] bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
                 <Key className="w-3.5 h-3.5" />
@@ -150,9 +150,9 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="p-4 rounded-md bg-slate-900/60 border border-slate-800 space-y-2">
+          <div className="p-4 rounded-[4px] bg-[#0b1326] border border-[#1e293b] space-y-2">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-[4px] bg-slate-800 border border-slate-700 text-slate-300 flex items-center justify-center shrink-0">
+              <div className="w-7 h-7 rounded-[4px] bg-[#060e20] border border-[#1e293b] text-slate-300 flex items-center justify-center shrink-0">
                 <Database className="w-3.5 h-3.5" />
               </div>
               <h2 className="font-mono text-xs font-bold text-slate-200 uppercase">
@@ -166,7 +166,7 @@ export default async function HomePage() {
         </div>
 
         {/* Architectural Standards Checklist */}
-        <div className="mt-4 p-4 rounded-md border border-slate-800 bg-slate-950/70 w-full text-left">
+        <div className="mt-4 p-4 rounded-[4px] border border-[#1e293b] bg-[#060e20] w-full text-left">
           <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 mb-2.5">
             Operational Verification Standards
           </div>

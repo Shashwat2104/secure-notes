@@ -24,10 +24,10 @@ export function NoteViewer({ note }: NoteViewerProps) {
   const lines = (note.content || "").split("\n");
 
   return (
-    <div className="max-w-3xl w-full mx-auto p-5 sm:p-6 rounded-md border border-slate-800 bg-slate-900/80 space-y-4 text-left">
+    <div className="max-w-3xl w-full mx-auto p-5 sm:p-6 rounded-[4px] border border-[#1e293b] bg-[#0b1326] space-y-4 text-left">
       {/* Self-Destruct Warning Stamp */}
       {note.shareType === "ONE_TIME" && (
-        <div className="p-3.5 rounded bg-amber-950/30 border border-amber-500/40 text-amber-200 flex items-start gap-2.5">
+        <div className="p-3.5 rounded-[4px] bg-amber-950/20 border border-amber-500/40 text-amber-200 flex items-start gap-2.5">
           <Flame className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
           <div className="text-xs space-y-0.5">
             <span className="font-mono font-semibold text-[11px] text-amber-300 uppercase tracking-wide block">
@@ -41,7 +41,7 @@ export function NoteViewer({ note }: NoteViewerProps) {
       )}
 
       {/* Secret Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1e293b] pb-3">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <h1 className="text-base sm:text-lg font-semibold text-slate-100">{note.title}</h1>
@@ -68,7 +68,7 @@ export function NoteViewer({ note }: NoteViewerProps) {
             size="sm"
             variant="secondary"
             onClick={handleCopy}
-            className="gap-1 font-mono text-xs"
+            className="gap-1 font-mono text-xs uppercase"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             <span>{copied ? "COPIED" : "COPY PAYLOAD"}</span>
@@ -83,15 +83,15 @@ export function NoteViewer({ note }: NoteViewerProps) {
           <span>UTF-8 ENCODED</span>
         </div>
 
-        <div className="p-3 sm:p-4 bg-slate-950 rounded border border-slate-800 font-mono text-xs sm:text-sm text-slate-100 leading-relaxed whitespace-pre-wrap select-all overflow-x-auto">
+        <div className="p-3 sm:p-4 bg-[#060e20] rounded-[4px] border border-[#1e293b] font-mono text-xs sm:text-sm text-slate-100 leading-relaxed whitespace-pre-wrap select-all overflow-x-auto">
           {note.content}
         </div>
       </div>
 
       {/* Telemetry Footer */}
-      <div className="p-2.5 rounded bg-slate-950 border border-slate-800/80 text-[10px] font-mono text-slate-400 flex flex-wrap items-center justify-between gap-2">
+      <div className="p-2.5 rounded-[4px] bg-[#060e20] border border-[#1e293b] text-[10px] font-mono text-slate-400 flex flex-wrap items-center justify-between gap-2">
         <span className="flex items-center gap-1.5 text-slate-400">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse" />
           Zero-Knowledge Transmission Verified
         </span>
         <span className="text-slate-500">Authoritative UTC validation enforced</span>
