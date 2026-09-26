@@ -2,12 +2,10 @@
 
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
-import { Navbar } from "@/components/layout/navbar";
 import { UnlockForm } from "@/components/share/unlock-form";
 import { NoteViewer } from "@/components/share/note-viewer";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Shield, ShieldAlert, ArrowLeft, Loader2 } from "lucide-react";
+import { Shield, ShieldAlert, ArrowLeft, Loader2, Lock } from "lucide-react";
 import { SharedNoteResponse } from "@/types";
 
 export default function SharePage({
@@ -35,7 +33,7 @@ export default function SharePage({
         }
 
         setNoteData(data);
-      } catch (err) {
+      } catch {
         setError("This share link is unavailable.");
       } finally {
         setLoading(false);
@@ -47,44 +45,57 @@ export default function SharePage({
 
   return (
     <>
-      <header className="border-b border-slate-800 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5 font-bold text-lg text-slate-100 hover:text-blue-400 transition-colors">
-            <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
-              <Shield className="w-4 h-4" />
+      <header className="border-b border-slate-800 bg-slate-950/90 backdrop-blur-xs sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+          <Link
+            href="/"
+            className="flex items-center gap-2 font-mono text-sm sm:text-base text-slate-100 hover:text-emerald-400 transition-colors"
+          >
+            <div className="w-7 h-7 rounded-[4px] bg-slate-900 border border-slate-700/80 flex items-center justify-center text-emerald-400">
+              <Shield className="w-3.5 h-3.5" />
             </div>
-            <span>SecureNotes</span>
+            <span className="font-semibold tracking-tight">SECURE<span className="text-emerald-400">_VAULT</span></span>
           </Link>
-          <span className="text-xs text-slate-500">
-            Encrypted End-to-End Share
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] bg-slate-900 border border-slate-800 text-[10px] font-mono text-slate-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse shrink-0" />
+            RECIPIENT PORTAL // E2EE
           </span>
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center px-4 py-16">
+      <main className="flex-1 flex items-center justify-center px-4 py-12">
         {loading && (
-          <div className="flex flex-col items-center justify-center gap-3 text-slate-400">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-            <p className="text-sm">Decrypting share token...</p>
+          <div className="p-6 rounded-md bg-slate-900/60 border border-slate-800 flex flex-col items-center justify-center gap-3 text-slate-400 max-w-sm w-full mx-auto text-center">
+            <div className="w-8 h-8 rounded-[4px] bg-slate-950 border border-slate-700/80 flex items-center justify-center text-emerald-400">
+              <Loader2 className="w-4 h-4 animate-spin" />
+            </div>
+            <div className="space-y-0.5">
+              <p className="text-xs font-semibold font-mono text-slate-200 uppercase">Resolving Token Nonce</p>
+              <p className="text-[11px] text-slate-500 font-mono">Verifying UTC expiration and claim status...</p>
+            </div>
           </div>
         )}
 
         {!loading && error && (
-          <Card className="max-w-md w-full mx-auto text-center py-8">
-            <div className="w-12 h-12 rounded-full bg-red-950/50 border border-red-800 text-red-400 mx-auto flex items-center justify-center mb-4">
-              <ShieldAlert className="w-6 h-6" />
+          <div className="max-w-md w-full mx-auto text-center p-6 rounded-md border border-slate-800 bg-slate-900/60 space-y-4">
+            <div className="w-10 h-10 rounded-[4px] bg-rose-950/40 border border-rose-500/30 text-rose-400 mx-auto flex items-center justify-center">
+              <ShieldAlert className="w-5 h-5" />
             </div>
-            <CardTitle className="text-lg text-red-200">Share Link Unavailable</CardTitle>
-            <CardDescription className="max-w-xs mx-auto mt-2 mb-6">
-              This note may have expired, been revoked by its owner, already been consumed, or the token is invalid.
-            </CardDescription>
-            <Link href="/">
-              <Button variant="outline" size="sm" className="gap-2">
-                <ArrowLeft className="w-4 h-4" />
-                <span>Return to SecureNotes</span>
-              </Button>
-            </Link>
-          </Card>
+            <div className="space-y-1">
+              <h2 className="text-sm font-semibold font-mono text-slate-100 uppercase">Share Link Unavailable</h2>
+              <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
+                This note may have reached its UTC expiration limit, been manually revoked, consumed (one-time burn), or the token is invalid.
+              </p>
+            </div>
+            <div className="pt-2">
+              <Link href="/">
+                <Button variant="secondary" size="sm" className="gap-1.5 font-mono text-xs">
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Return to SecureVault</span>
+                </Button>
+              </Link>
+            </div>
+          </div>
         )}
 
         {!loading && !error && noteData && (
@@ -103,3 +114,4 @@ export default function SharePage({
     </>
   );
 }
+

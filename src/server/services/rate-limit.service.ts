@@ -78,4 +78,20 @@ export class RateLimitService {
       where: { key },
     });
   }
+
+  /**
+   * Cleans up expired rate limit records past their retention window.
+   * Can be invoked by scheduled maintenance workers or periodic crons.
+   */
+  static async cleanupExpiredRecords(windowMs = this.DEFAULT_WINDOW_MS): Promise<number> {
+    const cutoff = new Date(Date.now() - windowMs);
+    const result = await prisma.rateLimitRecord.deleteMany({
+      where: {
+        windowStart: {
+          lt: cutoff,
+        },
+      },
+    });
+    return result.count;
+  }
 }

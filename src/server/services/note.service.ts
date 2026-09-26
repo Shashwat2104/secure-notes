@@ -2,12 +2,14 @@ import { prisma } from "@/lib/db/prisma";
 import { generateShareToken, hashShareToken } from "@/lib/security/tokens";
 import { generateAccessKey } from "@/lib/security/access-key";
 import { hashSecret } from "@/lib/security/hashing";
+import { encryptPayload, decryptPayload } from "@/lib/security/encryption";
 import { CreateNoteInput } from "@/lib/validation/note.schema";
 
 export class NoteService {
   /**
    * Creates a note and its initial share link.
    * Generates a CSPRNG token (hashed at rest) and dynamic access key if protected.
+   * Encrypts note payload at rest using AES-256-GCM authenticated encryption.
    */
   static async createNote(userId: string, input: CreateNoteInput, baseUrl: string) {
     const { rawToken, tokenHash } = generateShareToken();
@@ -19,12 +21,14 @@ export class NoteService {
       accessKeyHash = await hashSecret(rawAccessKey);
     }
 
+    const encryptedContent = encryptPayload(input.content);
+
     const result = await prisma.$transaction(async (tx) => {
       const note = await tx.note.create({
         data: {
           userId,
           title: input.title,
-          content: input.content,
+          content: encryptedContent,
         },
       });
 
@@ -47,7 +51,7 @@ export class NoteService {
     return {
       id: result.note.id,
       title: result.note.title,
-      content: result.note.content,
+      content: decryptPayload(result.note.content),
       createdAt: result.note.createdAt,
       shareLink: {
         id: result.shareLink.id,
@@ -88,7 +92,7 @@ export class NoteService {
     return {
       id: note.id,
       title: note.title,
-      content: note.content,
+      content: decryptPayload(note.content),
       createdAt: note.createdAt,
       updatedAt: note.updatedAt,
       shareLinks: note.shareLinks.map((link) => {

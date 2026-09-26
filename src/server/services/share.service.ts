@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db/prisma";
 import { hashShareToken } from "@/lib/security/tokens";
 import { verifySecret } from "@/lib/security/hashing";
+import { decryptPayload } from "@/lib/security/encryption";
 import { RateLimitService } from "./rate-limit.service";
 import { normalizeAccessKey } from "@/lib/security/access-key";
 
@@ -126,7 +127,7 @@ export class ShareService {
       status: "SUCCESS",
       isProtected: false,
       title: note.title,
-      content: note.content,
+      content: decryptPayload(note.content),
       shareType: link.shareType,
       expiresAt: link.expiresAt,
     };
@@ -235,7 +236,7 @@ export class ShareService {
     return {
       status: "SUCCESS",
       title: note.title,
-      content: note.content,
+      content: decryptPayload(note.content),
       shareType: link.shareType,
       expiresAt: link.expiresAt,
     };

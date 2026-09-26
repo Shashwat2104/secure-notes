@@ -18,7 +18,9 @@ export async function POST(req: NextRequest) {
       return apiError("Validation Error", 400, result.error.errors);
     }
 
-    const origin = req.nextUrl.origin || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const proto = req.headers.get("x-forwarded-proto") || req.nextUrl.protocol.replace(":", "");
+    const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || req.nextUrl.host;
+    const origin = process.env.NEXT_PUBLIC_APP_URL || (host ? `${proto}://${host}` : req.nextUrl.origin) || "http://localhost:3000";
     const note = await NoteService.createNote(session.user.id, result.data, origin);
 
     return apiSuccess(note, 201);

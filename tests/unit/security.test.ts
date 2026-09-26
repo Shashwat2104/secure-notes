@@ -86,3 +86,46 @@ describe("Security Utilities: Dynamic Access Key Generator", () => {
     expect(normalized).toBe("K8F4X92M");
   });
 });
+
+describe("Security Utilities: AES-256-GCM Payload Encryption at Rest", () => {
+  it("encrypts and decrypts sensitive content round-trip", async () => {
+    const { encryptPayload, decryptPayload } = await import("@/lib/security/encryption");
+    const secretText = "Classified confidential note payload with symbols & emojis 🔒 🚀";
+    const encrypted = encryptPayload(secretText);
+
+    expect(encrypted.startsWith("enc:v1:")).toBe(true);
+    expect(encrypted).not.toContain(secretText);
+
+    const decrypted = decryptPayload(encrypted);
+    expect(decrypted).toBe(secretText);
+  });
+
+  it("produces non-deterministic ciphertext due to random 96-bit IVs", async () => {
+    const { encryptPayload } = await import("@/lib/security/encryption");
+    const secretText = "Repeated confidential string";
+    const enc1 = encryptPayload(secretText);
+    const enc2 = encryptPayload(secretText);
+
+    expect(enc1).not.toBe(enc2);
+  });
+
+  it("fails decryption if auth tag or ciphertext is tampered with", async () => {
+    const { encryptPayload, decryptPayload } = await import("@/lib/security/encryption");
+    const secretText = "Tamper detection test";
+    const encrypted = encryptPayload(secretText);
+    const parts = encrypted.split(":");
+    // Tamper with the ciphertext component
+    parts[3] = parts[3].slice(0, -2) + "ff";
+    const tampered = parts.join(":");
+
+    expect(() => decryptPayload(tampered)).toThrow();
+  });
+
+  it("transparently supports legacy unencrypted payloads", async () => {
+    const { decryptPayload } = await import("@/lib/security/encryption");
+    const legacyPlaintext = "Legacy unencrypted note from previous version";
+    const result = decryptPayload(legacyPlaintext);
+    expect(result).toBe(legacyPlaintext);
+  });
+});
+

@@ -1,11 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import { Lock, Key, ShieldAlert } from "lucide-react";
+import { Lock, Key, ShieldAlert, Terminal } from "lucide-react";
 import { SharedNoteResponse } from "@/types";
 
 interface UnlockFormProps {
@@ -73,73 +71,80 @@ export function UnlockForm({ token, onUnlocked }: UnlockFormProps) {
 
       onUnlocked(data);
     } catch {
-      setError("An unexpected network error occurred.");
+      setError("An unexpected network error occurred while verifying access key.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Card className="max-w-md w-full mx-auto">
-      <CardHeader className="text-center">
-        <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center mb-3">
-          <Lock className="w-6 h-6" />
+    <div className="max-w-md w-full mx-auto p-5 sm:p-6 rounded-md border border-slate-800 bg-slate-900/80 space-y-4 text-left">
+      <div className="text-center space-y-2 pb-2 border-b border-slate-800">
+        <div className="w-10 h-10 rounded-[4px] bg-amber-500/10 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center">
+          <Key className="w-5 h-5" />
         </div>
-        <CardTitle>Protected Note</CardTitle>
-        <CardDescription>
-          This note is password-protected. Enter the dynamic access key provided by the sender to decrypt and view the content.
-        </CardDescription>
-      </CardHeader>
+        <div>
+          <h2 className="text-sm font-semibold font-mono text-slate-100 uppercase tracking-wide">
+            Zero-Knowledge Decryption Challenge
+          </h2>
+          <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+            This secret requires an Argon2id access key. Enter the exact key provided by the sender to verify and decrypt the secret content.
+          </p>
+        </div>
+      </div>
 
       <form onSubmit={handleUnlock} className="space-y-4">
         {retryAfter !== null && (
-          <Alert variant="warning" title="Rate Limit Exceeded">
+          <Alert variant="warning" title="Rate Limit Lockout Active">
             <div className="flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-amber-400 shrink-0" />
               <span>
-                Maximum failed attempts exceeded. Please wait <strong>{retryAfter} seconds</strong> before trying again.
+                Maximum failed attempts exceeded. Lockout active:{" "}
+                <strong className="font-mono text-amber-300">{retryAfter}s</strong> remaining.
               </span>
             </div>
           </Alert>
         )}
 
         {error && retryAfter === null && (
-          <Alert variant="error" title="Access Denied">
+          <Alert variant="error" title="Access Key Verification Failed">
             {error}
           </Alert>
         )}
 
-        <div className="space-y-1.5 text-left">
-          <label className="block text-sm font-medium text-slate-300">
-            Access Key
+        <div className="space-y-1">
+          <label className="block text-[11px] font-mono font-medium uppercase tracking-wider text-slate-300">
+            Recipient Access Key
           </label>
           <div className="relative">
             <input
               type="text"
-              placeholder="e.g., K8F4-X92M"
+              placeholder="XXXX-XXXX-XXXX"
               value={accessKey}
               onChange={(e) => handleKeyChange(e.target.value)}
               disabled={retryAfter !== null}
-              className="w-full px-3.5 py-3 bg-slate-950 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-600 text-center font-mono text-lg font-bold tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-              maxLength={12}
+              className="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-md text-slate-100 placeholder-slate-600 text-center font-mono text-base font-bold tracking-widest focus:outline-none focus-visible:ring-1 focus-visible:ring-emerald-500 disabled:opacity-50 transition-colors uppercase"
+              maxLength={16}
               required
             />
-            <Key className="w-4 h-4 text-slate-500 absolute left-3 top-4" />
+            <Lock className="w-3.5 h-3.5 text-slate-500 absolute left-3 top-3.5 pointer-events-none" />
           </div>
-          <p className="text-xs text-slate-500 text-center">
-            Keys are case-insensitive.
+          <p className="text-[10px] text-slate-500 text-center font-mono">
+            Key input is case-insensitive. Brute-force rate limiting enforced.
           </p>
         </div>
 
         <Button
           type="submit"
-          size="lg"
-          className="w-full"
-          disabled={isSubmitting || retryAfter !== null}
+          size="md"
+          className="w-full font-mono text-xs uppercase tracking-wider"
+          loading={isSubmitting}
+          disabled={retryAfter !== null}
         >
-          {isSubmitting ? "Verifying Access Key..." : "Unlock Note"}
+          <span>{isSubmitting ? "Deriving Key & Decrypting..." : "Decrypt & Reveal Secret"}</span>
         </Button>
       </form>
-    </Card>
+    </div>
   );
 }
+

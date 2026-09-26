@@ -5,32 +5,42 @@ export interface InputProps
   label?: string;
   error?: string;
   helperText?: string;
+  icon?: React.ReactNode;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className = "", label, error, helperText, id, ...props }, ref) => {
+  ({ className = "", label, error, helperText, icon, id, ...props }, ref) => {
     const inputId = id || props.name;
 
     return (
-      <div className="w-full space-y-1.5 text-left">
+      <div className="w-full space-y-1 text-left">
         {label && (
-          <label htmlFor={inputId} className="block text-sm font-medium text-slate-300">
+          <label htmlFor={inputId} className="block text-[11px] font-mono font-medium uppercase tracking-wider text-slate-300">
             {label}
           </label>
         )}
-        <input
-          id={inputId}
-          ref={ref}
-          className={`w-full px-3.5 py-2.5 bg-slate-900 border rounded-lg text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
-            error
-              ? "border-red-500 focus:ring-red-500"
-              : "border-slate-700 hover:border-slate-600 focus:border-blue-500"
-          } ${className}`}
-          {...props}
-        />
-        {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
+        <div className="relative flex items-center">
+          {icon && (
+            <div className="absolute left-3 pointer-events-none text-slate-500">
+              {icon}
+            </div>
+          )}
+          <input
+            id={inputId}
+            ref={ref}
+            className={`w-full ${
+              icon ? "pl-9" : "px-3"
+            } py-2 bg-slate-950 border rounded-md text-slate-100 placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus-visible:ring-1 focus-visible:ring-emerald-500 focus:border-emerald-500/70 transition-colors ${
+              error
+                ? "border-rose-500 focus-visible:ring-rose-500"
+                : "border-slate-800 hover:border-slate-700"
+            } ${className}`}
+            {...props}
+          />
+        </div>
+        {error && <p className="text-[11px] font-mono text-rose-400">{error}</p>}
         {helperText && !error && (
-          <p className="text-xs text-slate-400">{helperText}</p>
+          <p className="text-[11px] font-mono text-slate-500">{helperText}</p>
         )}
       </div>
     );
@@ -38,3 +48,5 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = "Input";
+
+

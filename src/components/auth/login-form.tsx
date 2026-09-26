@@ -4,11 +4,10 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
-import { Lock, LogIn } from "lucide-react";
+import { Lock, Mail, ArrowRight, Shield } from "lucide-react";
 
 export function LoginForm() {
   const router = useRouter();
@@ -35,40 +34,44 @@ export function LoginForm() {
       });
 
       if (res?.error) {
-        setError("Invalid email or password.");
+        setError("Invalid email or password credentials.");
         return;
       }
 
       router.push("/notes");
       router.refresh();
-    } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
+    } catch {
+      setError("An unexpected network error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Card className="max-w-md w-full mx-auto">
-      <CardHeader className="text-center">
-        <div className="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 mx-auto flex items-center justify-center mb-3">
-          <Lock className="w-6 h-6" />
+    <div className="max-w-md w-full mx-auto p-5 sm:p-6 rounded-md border border-slate-800 bg-slate-900/80 space-y-4 text-left">
+      <div className="text-center space-y-2 pb-2 border-b border-slate-800">
+        <div className="w-9 h-9 rounded-[4px] bg-slate-950 border border-slate-700/80 text-emerald-400 mx-auto flex items-center justify-center">
+          <Lock className="w-4 h-4" />
         </div>
-        <CardTitle>Welcome Back</CardTitle>
-        <CardDescription>
-          Sign in to access your dashboard, view active notes, or create new shares.
-        </CardDescription>
-      </CardHeader>
+        <div>
+          <h2 className="text-sm font-semibold font-mono text-slate-100 uppercase tracking-wide">
+            Authenticate Vault Profile
+          </h2>
+          <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+            Enter your credentials to access encrypted notes and configure cryptographic share links.
+          </p>
+        </div>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3.5">
         {registered && (
-          <Alert variant="success" title="Account Created">
-            Your account was created successfully! Please sign in below.
+          <Alert variant="success" title="Profile Registered">
+            Your account was initialized successfully. You may now sign in.
           </Alert>
         )}
 
         {error && (
-          <Alert variant="error" title="Login Failed">
+          <Alert variant="error" title="Authentication Rejected">
             {error}
           </Alert>
         )}
@@ -76,7 +79,8 @@ export function LoginForm() {
         <Input
           type="email"
           label="Email Address"
-          placeholder="jane@example.com"
+          placeholder="operator@enterprise.internal"
+          icon={<Mail className="w-3.5 h-3.5" />}
           value={formData.email}
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
           required
@@ -84,8 +88,9 @@ export function LoginForm() {
 
         <Input
           type="password"
-          label="Password"
-          placeholder="••••••••"
+          label="Master Passphrase"
+          placeholder="••••••••••••"
+          icon={<Lock className="w-3.5 h-3.5" />}
           value={formData.password}
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           required
@@ -93,20 +98,22 @@ export function LoginForm() {
 
         <Button
           type="submit"
-          className="w-full mt-2"
-          size="lg"
-          disabled={isSubmitting}
+          className="w-full mt-2 font-mono text-xs uppercase tracking-wider"
+          size="md"
+          loading={isSubmitting}
         >
-          {isSubmitting ? "Signing in..." : "Sign In"}
+          <span>{isSubmitting ? "Authenticating Session..." : "Authorize Vault Session"}</span>
         </Button>
 
-        <p className="text-xs text-center text-slate-400 mt-4">
-          Don&apos;t have an account yet?{" "}
-          <Link href="/register" className="text-blue-400 hover:underline font-medium">
-            Register Here
+        <p className="text-[11px] font-mono text-center text-slate-400 pt-2 border-t border-slate-800/80">
+          Unregistered operator?{" "}
+          <Link href="/register" className="text-emerald-400 hover:text-emerald-300 font-semibold transition-colors">
+            Initialize Profile
           </Link>
         </p>
       </form>
-    </Card>
+    </div>
   );
 }
+
+
