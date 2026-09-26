@@ -40,3 +40,5 @@ specs
 .github
 migrate_specify.py
 .specify/
+skills-lock.json
+archify

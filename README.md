@@ -1,6 +1,12 @@
 # SecureNotes: Production-Grade Secure Note-Sharing Application
 
+[![Live Deployed App](https://img.shields.io/badge/Live%20App-secure--notes--jade.vercel.app-10b981?style=for-the-badge&logo=vercel)](https://secure-notes-jade.vercel.app/)
+[![Interactive Architecture Diagram](https://img.shields.io/badge/Architecture%20Diagram-Live%20Viewer-38bdf8?style=for-the-badge&logo=html5)](https://secure-notes-jade.vercel.app/architecture.html)
+
 A production-quality, ephemeral, encrypted note-sharing platform built with **Next.js 16+ (App Router)**, **TypeScript**, **PostgreSQL**, **Prisma ORM**, and **Auth.js v5**. Designed from the ground up with a focus on transactional correctness, zero race conditions, cryptographically secure token management, memory-hard credential hashing, and horizontal scalability.
+
+- **🚀 Live Deployed Application**: [https://secure-notes-jade.vercel.app/](https://secure-notes-jade.vercel.app/)
+- **🏛️ Live Interactive Architecture**: [https://secure-notes-jade.vercel.app/architecture.html](https://secure-notes-jade.vercel.app/architecture.html)
 
 ---
 
@@ -15,48 +21,63 @@ SecureNotes enables authenticated users to create and distribute confidential no
 
 ---
 
-## 2. Layered Architecture
+## 2. System Architecture & Trust Boundaries
 
-The system strictly follows a clean layered architecture with complete separation of concerns:
+The system is organized into three distinct security and operational tiers with explicit trust boundaries:
 
-```text
-┌─────────────────────────────────────────────────────────┐
-│                       Browser / Client                  │
-│        React Server Components + Minimal Client UI      │
-└────────────────────────────┬────────────────────────────┘
-                             │ HTTP (JSON / SSR)
-┌────────────────────────────▼────────────────────────────┐
-│                  Next.js App Router                     │
-│                   Route Handlers                        │
-│   (/api/register, /api/notes, /api/share/[token]/*)     │
-└────────────────────────────┬────────────────────────────┘
-                             │ Validated DTOs
-┌────────────────────────────▼────────────────────────────┐
-│                    Validation Layer                     │
-│                    Zod Schemas                          │
-└────────────────────────────┬────────────────────────────┘
-                             │ Strongly-typed Inputs
-┌────────────────────────────▼────────────────────────────┐
-│                    Service Layer                        │
-│   • AuthService        • NoteService                    │
-│   • ShareService       • RateLimitService               │
-│   • TokenService       • AccessKeyService               │
-└────────────────────────────┬────────────────────────────┘
-                             │ Atomic Operations / Raw SQL
-┌────────────────────────────▼────────────────────────────┐
-│                     Prisma ORM                          │
-│          Connection Pooling & Transactions              │
-└────────────────────────────┬────────────────────────────┘
-                             │ SQL Queries / Row Locks
-┌────────────────────────────▼────────────────────────────┐
-│                     PostgreSQL                          │
-│   Authoritative State: tokens, counts, expiry, status   │
-└─────────────────────────────────────────────────────────┘
+[![SecureNotes Architecture](./public/architecture.png)](https://secure-notes-jade.vercel.app/architecture.html)
+
+> 💡 **Live Interactive Architecture Viewer**: Explore the standalone diagram directly at **[https://secure-notes-jade.vercel.app/architecture.html](https://secure-notes-jade.vercel.app/architecture.html)** to interact with the full Archify viewer featuring dark/light themes, component isolation, pan/zoom, and curated request stories.
+
+### Architecture Topology & Trust Boundaries
+
+```mermaid
+flowchart LR
+    subgraph ClientTier["🌐 Untrusted Client Tier (Browser)"]
+        UI["Client Components<br/>(React 19 / Tailwind)"]
+    end
+
+    subgraph AppServer["🛡️ Trusted Application Server (Next.js 15 Runtime)"]
+        Router["Next.js App Router<br/>(Server Components & Pages)"]
+        API["Route Handlers<br/>(/api/notes & /api/share)"]
+        NextAuth["NextAuth v5<br/>(Stateless JWT Auth)"]
+        Services["Domain Services<br/>(Share & Note Logic)"]
+        Crypto["Crypto Module<br/>(Argon2id + AES-256-GCM)"]
+        Prisma["Prisma ORM<br/>(Query Engine & Pool)"]
+    end
+
+    subgraph DataTier["🗄️ Isolated Database VPC"]
+        DB[("PostgreSQL DB<br/>ACID Row-Locked Store")]
+    end
+
+    UI -->|"RSC Stream"| Router
+    UI ==>|"HTTPS / JSON"| API
+    API -.->|"Verify Session"| NextAuth
+    API -->|"Validated DTO"| Services
+    Services -.->|"Hash & Decrypt"| Crypto
+    Services ==>|"Atomic SQL"| Prisma
+    Prisma ==>|"TCP :5432 (SSL)"| DB
+
+    classDef client fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#f8fafc;
+    classDef server fill:#022c22,stroke:#10b981,stroke-width:2px,color:#f8fafc;
+    classDef security fill:#450a0a,stroke:#f43f5e,stroke-width:2px,color:#f8fafc;
+    classDef db fill:#3b0764,stroke:#a855f7,stroke-width:2px,color:#f8fafc;
+
+    class UI client;
+    class Router,API,Services,Prisma server;
+    class NextAuth,Crypto security;
+    class DB db;
 ```
 
-- **Route Handlers**: Responsible purely for HTTP parsing, session extraction, and schema validation. Zero direct business logic.
-- **Service Layer (`src/server/services/`)**: Encapsulates all domain logic, concurrency guarantees, security policies, and rate-limiting rules.
-- **Prisma Client (`src/lib/db/prisma.ts`)**: Singleton database connection pool managing PostgreSQL persistence.
+### Layer Responsibilities
+
+- **Client Components (`src/components/`)**: Handle UI state, forms, client-side input masking, and unlock challenges. Zero secret tokens or unencrypted payloads are persisted in client storage (`localStorage` / `sessionStorage`).
+- **Route Handlers (`src/app/api/`)**: Pure HTTP controllers performing Zod schema validation, cookie parsing, and standard JSON envelope serialization (`apiSuccess`, `apiError`).
+- **Authentication Layer (`src/lib/auth/`)**: NextAuth v5 stateless session provider verifying signed, encrypted JWT session cookies on protected endpoints.
+- **Domain Services (`src/server/services/`)**: Pure business logic orchestrators (`NoteService`, `ShareService`, `RateLimitService`) enforcing atomic operations, sliding-window rate limits, and zero-race-condition constraints.
+- **Cryptography Engine (`src/lib/security/`)**: Performs memory-hard Argon2id key hashing (64MB RAM, 3 iterations), authenticated AES-256-GCM payload encryption with unique IVs, and SHA-256 token hashing at rest.
+- **Prisma Client (`src/lib/db/prisma.ts`)**: Manages the PostgreSQL connection pool and executes parameterized atomic SQL queries (`UPDATE ... WHERE "consumedAt" IS NULL`).
+- **PostgreSQL Database**: Authoritative state store providing ACID transactional guarantees and row-level locking for atomic single-recipient claims.
 
 ---
 
